@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
@@ -46,11 +47,11 @@ module.exports = {
 		rules: [
 			{
 				test: /\.less$/,
-				loader: extractLESS.extract(['css-loader', 'less-loader'])
+				loader: extractLESS.extract(['css-loader', 'less-loader', 'postcss-loader'])
 			},
 			{
 				test: /\.css$/,
-				loader: extractLESS.extract(['css-loader'])
+				loader: extractLESS.extract(['css-loader', 'postcss-loader'])
 			},
 			{
 				test: /\.(png|svg|jpg|gif)$/,
