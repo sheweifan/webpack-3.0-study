@@ -3,7 +3,6 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
-// console.log()
 
 var options = process.env;
 
@@ -20,7 +19,7 @@ module.exports = {
 		vendor: ['lodash']
     },
 	output: {     
-		filename: '[name].bundle.js',
+		filename: '[name].[hash].js',
 		path: path.resolve(__dirname, 'dist')
 	},
 	plugins: [
@@ -30,8 +29,11 @@ module.exports = {
 			title: 'test title'
 		}),
 		new webpack.optimize.UglifyJsPlugin({
-			sourceMap: options.devtool && (options.devtool.indexOf("sourcemap") >= 0 || options.devtool.indexOf("source-map") >= 0)
-		})
+			// sourceMap: options.devtool && (options.devtool.indexOf("sourcemap") >= 0 || options.devtool.indexOf("source-map") >= 0)
+		}),
+		new webpack.optimize.CommonsChunkPlugin({
+	      names: 'vendor',  //name是提取公共代码块后js文件的名字。
+	    })
 	],
 	module: {
 		// 从 webpack 3.0.0 开始
