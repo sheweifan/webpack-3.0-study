@@ -5,6 +5,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 var extractLESS = new ExtractTextPlugin("styles.css")
+
 var options = process.env;
 
 module.exports = {
@@ -45,11 +46,11 @@ module.exports = {
 		rules: [
 			{
 				test: /\.less$/,
-				// use: [
-				// 	'style-loader',
-				// 	'css-loader'
-				// ]
 				loader: extractLESS.extract(['css-loader', 'less-loader'])
+			},
+			{
+				test: /\.css$/,
+				loader: extractLESS.extract(['css-loader'])
 			},
 			{
 				test: /\.(png|svg|jpg|gif)$/,

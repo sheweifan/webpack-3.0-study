@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import './style.less';
+import './style.css';
 
 console.log(MyLibrary)
 function component() {
