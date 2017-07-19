@@ -2,8 +2,9 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-
+var extractLESS = new ExtractTextPlugin("styles.css")
 var options = process.env;
 
 module.exports = {
@@ -23,6 +24,7 @@ module.exports = {
 		path: path.resolve(__dirname, 'dist')
 	},
 	plugins: [
+		extractLESS,
     	new webpack.HotModuleReplacementPlugin(),
 		new CleanWebpackPlugin(['dist']),
 		new HtmlWebpackPlugin({
@@ -42,11 +44,12 @@ module.exports = {
 		},
 		rules: [
 			{
-				test: /\.css$/,
-				use: [
-					'style-loader',
-					'css-loader'
-				]
+				test: /\.less$/,
+				// use: [
+				// 	'style-loader',
+				// 	'css-loader'
+				// ]
+				loader: extractLESS.extract(['css-loader', 'less-loader'])
 			},
 			{
 				test: /\.(png|svg|jpg|gif)$/,
