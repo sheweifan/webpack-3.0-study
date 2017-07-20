@@ -1,7 +1,4 @@
 // import _ from 'lodash';
-// import './style.less';
-// import './style.css';
-
 // function component() {
 //   var element = document.createElement('div');
 
@@ -21,6 +18,9 @@ import React,{ Component , PropTypes } from 'react';
 import { render } from 'react-dom';
 
 import Test from './Test.jsx';
+
+import './style.less';
+// import './style.css';
 
 render(
 	<Test />,

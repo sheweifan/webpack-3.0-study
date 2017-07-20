@@ -1,25 +1,73 @@
-const path = require('path');
-const webpack = require('webpack');
-const autoprefixer = require('autoprefixer');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var path = require('path');
+var webpack = require('webpack');
+var autoprefixer = require('autoprefixer');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+var CleanWebpackPlugin = require('clean-webpack-plugin');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-var extractLESS = new ExtractTextPlugin("styles.css")
-
-var options = process.env;
+var Visualizer = require('webpack-visualizer-plugin'); // remove it in production environment
+var extractLESS = new ExtractTextPlugin('styles.css')
 
 var cfg = {
 	APP_PATH: path.resolve(__dirname, 'src')
 }
 
+// 生成一个文件查看项目引用的所有模块的占比。
+var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
+var is_prod = process.argv[1].indexOf('webpack-dev-server') === -1
+
+var plugins =  is_prod ? [
+	new CleanWebpackPlugin(['./dist']),
+	new webpack.optimize.UglifyJsPlugin({
+	    compress: {
+	        warnings: false,
+	    },
+	}),
+	new Visualizer(),
+	new BundleAnalyzerPlugin({
+		defaultSizes: 'parsed',
+		// generateStatsFile: true,
+		statsOptions: { source: false }
+	}), 
+] : [
+	new webpack.optimize.UglifyJsPlugin({
+		sourceMap: true,
+	    compress: {
+	        warnings: true,
+	    },
+	}),
+	new webpack.DefinePlugin({
+	    'process.env': {
+	        NODE_ENV: JSON.stringify('development'), //定义生产环境
+	    },
+	}),
+	/*new webpack.DllReferencePlugin({
+        context: path.join(__dirname, "dist"),
+        //same as DLLPlugin
+        manifest: require("./dll/vendor-manifest.json")
+    }),
+    new webpack.DllPlugin({
+		// * path
+		// * 定义 manifest 文件生成的位置
+		// * [name]的部分由entry的名字替换
+		path: path.join(__dirname, 'dist', 'vendor-manifest.json'),
+		// * name
+		// * dll bundle 输出到那个全局变量上
+		// * 和 output.library 一样即可。 
+		name: 'vendor_library'
+    })
+	*/
+];
+
 module.exports = {
-	// devtool: "cheap-eval-source-map",
+	devtool: is_prod ? '' : 'source-map' ,
 	devServer: {
 		hot: true, // 告诉 dev-server 我们在使用 HMR
 		contentBase: path.resolve(__dirname, 'dist'),
 		publicPath: '/',
-		open: false
+		open: false,
+		disableHostCheck: true
 	},
 	entry: {
 		app: './src/index.js',
@@ -30,20 +78,21 @@ module.exports = {
 		path: path.resolve(__dirname, 'dist')
 	},
 	plugins: [
+		// 样式
 		extractLESS,
+    	// 模块热加载
     	new webpack.HotModuleReplacementPlugin(),
-		new CleanWebpackPlugin(['dist']),
+    	// 生成html
 		new HtmlWebpackPlugin({
 			title: 'test title',
 			template: './src/index.tpl.html'
 		}),
-		// new webpack.optimize.UglifyJsPlugin({
-			// sourceMap: options.devtool && (options.devtool.indexOf("sourcemap") >= 0 || options.devtool.indexOf("source-map") >= 0)
-		// }),
-		new webpack.optimize.CommonsChunkPlugin({
-	      names: 'vendor',  //name是提取公共代码块后js文件的名字。
-	    })
-	],
+		// 体积变小，加快运行速度
+	    new webpack.optimize.ModuleConcatenationPlugin(),
+	    new webpack.optimize.CommonsChunkPlugin({
+			names: 'vendor',  //name是提取公共代码块后js文件的名字。
+	    }),
+	].concat(plugins),
 	module: {
 		// 从 webpack 3.0.0 开始
 		// noParse: function(content) {
@@ -92,7 +141,7 @@ module.exports = {
 		]
 	},
 	resolve: {
-		mainFiles: ["index.web","index"],// 这里哦
+		mainFiles: ['index.web','index'],
 		modules: ['app', 'node_modules', path.join(__dirname, './node_modules')],
 		extensions: [
 			'.web.tsx', '.web.ts', '.web.jsx', '.web.js', '.ts', '.tsx',
@@ -109,6 +158,7 @@ module.exports = {
 	},
 	target: 'web'
 };
-
+// http://blog.csdn.net/qq_24840407/article/details/56035713
+// https://doc.webpack-china.org/plugins/dll-plugin/
 // https://github.com/ant-design/antd-mobile-samples/blob/master/web-webpack2/webpack.config.js
 // https://yaowenjie.github.io/front-end/using-webpack-dashboard

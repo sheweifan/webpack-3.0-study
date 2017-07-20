@@ -1,14 +1,15 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Button } from 'antd-mobile'
+import { Button, Icon } from 'antd-mobile'
 
 
 class Test extends React.Component{
 	render(){
 		return (
 			<div>
-				<Button>
+				<Button className="test_btn">
 					test
+					<Icon type="check" />
 				</Button>
 			</div>
 		)
