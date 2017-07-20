@@ -19,11 +19,14 @@ var is_prod = process.argv[1].indexOf('webpack-dev-server') === -1
 
 var plugins =  is_prod ? [
 	new CleanWebpackPlugin(['./dist']),
-	new webpack.optimize.UglifyJsPlugin({
-	    compress: {
-	        warnings: false,
-	    },
-	}),
+	new webpack.optimize.UglifyJsPlugin({//压缩代码
+	  output: {
+	    comments: false, //不移除注释
+	  },
+	  compress: {
+	    warnings: false//忽略警告，某些没有用到的组件在打包时会被移除，这时会产生警告，无需在意，webpack1默认true，webpack2默认false
+	  },
+	}),	
 	new Visualizer(),
 	new BundleAnalyzerPlugin({
 		defaultSizes: 'parsed',
@@ -31,33 +34,23 @@ var plugins =  is_prod ? [
 		statsOptions: { source: false }
 	}), 
 ] : [
-	new webpack.optimize.UglifyJsPlugin({
-		sourceMap: true,
-	    compress: {
-	        warnings: true,
-	    },
-	}),
+	
 	new webpack.DefinePlugin({
 	    'process.env': {
 	        NODE_ENV: JSON.stringify('development'), //定义生产环境
 	    },
 	}),
-	/*new webpack.DllReferencePlugin({
-        context: path.join(__dirname, "dist"),
-        //same as DLLPlugin
-        manifest: require("./dll/vendor-manifest.json")
-    }),
-    new webpack.DllPlugin({
-		// * path
-		// * 定义 manifest 文件生成的位置
-		// * [name]的部分由entry的名字替换
-		path: path.join(__dirname, 'dist', 'vendor-manifest.json'),
-		// * name
-		// * dll bundle 输出到那个全局变量上
-		// * 和 output.library 一样即可。 
-		name: 'vendor_library'
-    })
-	*/
+	// http://blog.csdn.net/a245452530/article/details/56485558
+	// new webpack.DllPlugin({
+	//      path: path.join(__dirname, './dist/manifest.json'),
+	//      name: '[name]',//在这个例子中将生成lib.js
+	//      context: __dirname,
+	// })
+	// //另一个配置文件
+	// new webpack.DllReferencePlugin({
+	//   context: __dirname,
+	//   manifest: require('./dist/manifest.json'),
+	// })
 ];
 
 module.exports = {
