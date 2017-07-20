@@ -46,13 +46,20 @@ module.exports = {
 	],
 	module: {
 		// 从 webpack 3.0.0 开始
-		noParse: function(content) {
-		  return /lodash/.test(content);
-		},
+		// noParse: function(content) {
+		//   return /lodash/.test(content);
+		// },
+		
+	    noParse: [/moment.js/],
 		rules: [
 			{
 				test: /\.(less|css)$/i,
-				loader: extractLESS.extract(['style-loader','css-loader', 'postcss-loader','less-loader'])
+				use: ExtractTextPlugin.extract({
+		          fallback: 'style-loader',
+		          use: [
+		            'css-loader', 'postcss-loader', 'less-loader'
+		          ]
+		        })
 			},
 			{
 				test: /\.(png|svg|jpg|gif)$/,
@@ -100,7 +107,8 @@ module.exports = {
 			'main',
 		],
 	},
+	target: 'web'
 };
 
-
+// https://github.com/ant-design/antd-mobile-samples/blob/master/web-webpack2/webpack.config.js
 // https://yaowenjie.github.io/front-end/using-webpack-dashboard
