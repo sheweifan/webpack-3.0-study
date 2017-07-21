@@ -64,6 +64,6 @@ var config = merge(baseConfig,{
 
 	}
 });
-console.log(config)
+// console.log(config)
 
 module.exports = config;
