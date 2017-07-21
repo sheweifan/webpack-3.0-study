@@ -4,10 +4,7 @@ var webpack = require('webpack');
 var merge = require('webpack-merge')
 // var baseConfig = require('./webpack.config.js')
 
-var cfg = {
-	APP_PATH: path.resolve(__dirname, 'src'),
-	DIST_PATH: path.resolve(__dirname, 'dist')
-}
+var cfg = require('./config.js').cfg;
 
 var dll = {
 	entry: {

@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack -p",
-    "dev": "webpack-dev-server ",
-    "build:dll": "webpack -p --config ./webpack.dll.config.js"
+    "build": "webpack -p --config ./task/webpack.prod.config.js",
+    "dev": "webpack-dev-server --config ./task/webpack.dev.config.js",
+    "build:dll": "webpack -p --config ./task/webpack.dll.config.js"
   },
   "author": "",
   "license": "ISC",
@@ -24,6 +24,7 @@
     "babel-preset-stage-0": "^6.24.1",
     "clean-webpack-plugin": "^0.1.16",
     "css-loader": "^0.28.4",
+    "ejs-loader": "^0.3.0",
     "extract-text-webpack-plugin": "^3.0.0",
     "file-loader": "^0.11.2",
     "html-webpack-plugin": "^2.29.0",
