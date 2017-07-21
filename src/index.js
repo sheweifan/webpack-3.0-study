@@ -12,14 +12,14 @@
 // document.body.appendChild(component());
 // 
 
+import './style.less';
+
 
 import React,{ Component , PropTypes } from 'react';
 
 import { render } from 'react-dom';
 
 import Test from './Test.jsx';
-
-import './style.less';
 // import './style.css';
 
 render(

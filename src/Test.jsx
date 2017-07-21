@@ -8,7 +8,7 @@ class Test extends React.Component{
 		return (
 			<div>
 				<Button className="test_btn">
-					test
+					test hehe
 					<Icon type="check" />
 				</Button>
 			</div>
