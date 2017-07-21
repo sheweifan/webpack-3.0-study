@@ -9,7 +9,8 @@ var Visualizer = require('webpack-visualizer-plugin'); // remove it in productio
 var extractLESS = new ExtractTextPlugin('styles.css')
 
 var cfg = {
-	APP_PATH: path.resolve(__dirname, 'src')
+	APP_PATH: path.resolve(__dirname, 'src'),
+	DIST_PATH: path.resolve(__dirname, 'dist')
 }
 
 // 生成一个文件查看项目引用的所有模块的占比。
@@ -18,14 +19,25 @@ var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlug
 var is_prod = process.argv[1].indexOf('webpack-dev-server') === -1
 
 var plugins =  is_prod ? [
-	new CleanWebpackPlugin(['./dist']),
-	new webpack.optimize.UglifyJsPlugin({//压缩代码
-	  output: {
-	    comments: false, //不移除注释
-	  },
-	  compress: {
-	    warnings: false//忽略警告，某些没有用到的组件在打包时会被移除，这时会产生警告，无需在意，webpack1默认true，webpack2默认false
-	  },
+	// 清理
+	new CleanWebpackPlugin([cfg.DIST_PATH]),
+	//压缩代码
+	new webpack.optimize.UglifyJsPlugin({
+	  // 最紧凑的输出
+	    beautify: false,
+	    // 删除所有的注释
+	    comments: false,
+	    compress: {
+	      // 在UglifyJs删除没有用到的代码时不输出警告  
+	      warnings: false,
+	      // 删除所有的 `console` 语句
+	      // 还可以兼容ie浏览器
+	      drop_console: true,
+	      // 内嵌定义了但是只用到一次的变量
+	      collapse_vars: true,
+	      // 提取出出现多次但是没有定义成变量去引用的静态值
+	      reduce_vars: true,
+	    }
 	}),	
 	new Visualizer(),
 	new BundleAnalyzerPlugin({
@@ -54,22 +66,26 @@ var plugins =  is_prod ? [
 ];
 
 module.exports = {
-	devtool: is_prod ? '' : 'source-map' ,
+	devtool: is_prod ? '' : 'cheap-module-source-map' ,
+	// 配置静态服务器
 	devServer: {
 		hot: true, // 告诉 dev-server 我们在使用 HMR
-		contentBase: path.resolve(__dirname, 'dist'),
+		contentBase: cfg.DIST_PATH,
 		publicPath: '/',
 		open: false,
 		disableHostCheck: true
 	},
+	// 入口
 	entry: {
 		app: './src/index.js',
 		vendor: ['react','react-dom']
     },
+    // 出口
 	output: {     
 		filename: '[name].[hash].js',
-		path: path.resolve(__dirname, 'dist')
+		path: cfg.DIST_PATH
 	},
+	// 插件
 	plugins: [
 		// 样式
 		extractLESS,
@@ -82,6 +98,7 @@ module.exports = {
 		}),
 		// 体积变小，加快运行速度
 	    new webpack.optimize.ModuleConcatenationPlugin(),
+	    // 公共js
 	    new webpack.optimize.CommonsChunkPlugin({
 			names: 'vendor',  //name是提取公共代码块后js文件的名字。
 	    }),
@@ -148,9 +165,14 @@ module.exports = {
 			'jsnext:main',
 			'main',
 		],
+		alias: {
+			'react': 'react/dist/react.js',
+			'react-dom': 'react-dom/dist/react-dom.js'
+		}
 	},
 	target: 'web'
 };
+// https://mp.weixin.qq.com/s/Z6CXa_5HP4RccfebxzmNng
 // http://blog.csdn.net/qq_24840407/article/details/56035713
 // https://doc.webpack-china.org/plugins/dll-plugin/
 // https://github.com/ant-design/antd-mobile-samples/blob/master/web-webpack2/webpack.config.js
