@@ -7,12 +7,12 @@
 //   return element;
 // }
 // document.body.appendChild(component());
-// 
+//
 
-import './style.less'
-import React,{ Component , PropTypes } from 'react'
-import { render } from 'react-dom'
+import './style.less';
+import React, { Component, PropTypes } from 'react';
+import { render } from 'react-dom';
 
-import Test from './Test.jsx'
+import Test from './Test.jsx';
 
-render(<Test />, document.getElementById('root'))
+render(<Test />, document.getElementById('root'));
