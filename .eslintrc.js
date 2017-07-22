@@ -21,7 +21,7 @@
 //     "indent": ["error", 4]
 //   },
 // };
-
+// npm i -g babel-eslint eslint-config-airbnb eslint-plugin-jsx-a11y eslint-plugin-react eslint-plugin-import
 
 
 module.exports = {
