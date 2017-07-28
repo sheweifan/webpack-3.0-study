@@ -1,44 +1,44 @@
-var path = require('path');
-var webpack = require('webpack');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-var cfg = require('./config.js').cfg;
+const cfg = require('./config.js').cfg;
 
-var is_prod = process.argv[1].indexOf('webpack-dev-server') === -1
+const is_prod = process.argv[1].indexOf('webpack-dev-server') === -1;
 module.exports = {
 	// 入口
-	entry: {
-		app: './src/index.js',
+  entry: {
+    app: './src/index.js',
 		// vendor: ['react','react-dom']
-    },
+  },
     // 出口
-	output: {     
-		filename: '[name].js',
-		path: cfg.DIST_PATH,
-		publicPath: '/'
-	},
+  output: {
+    filename: '[name].js',
+    path: cfg.DIST_PATH,
+    publicPath: '/',
+  },
 	// 插件
-	plugins: [
+  plugins: [
     	// 模块热加载
     	new webpack.HotModuleReplacementPlugin(),
     	// 生成html
-		new HtmlWebpackPlugin({
-			prod: is_prod,
-			title: 'test title',
-			template: './src/index.tpl.ejs'
-		}),
+    new HtmlWebpackPlugin({
+      prod: is_prod,
+      title: 'test title',
+      template: './src/index.tpl.ejs',
+    }),
 		// 体积变小，加快运行速度
 	    new webpack.optimize.ModuleConcatenationPlugin(),
-	    
-	],
-	module: {
+
+  ],
+  module: {
 		// 从 webpack 3.0.0 开始
 		// noParse: function(content) {
 		//   return /lodash/.test(content);
 		// },
-		
+
 	    noParse: [/moment.js/],
-		rules: [
+    rules: [
 			// {
 			// 	test: /\.(less|css)$/i,
 			// 	use: ExtractTextPlugin.extract({
@@ -48,61 +48,60 @@ module.exports = {
 		 //          ]
 		 //        })
 			// },
-			{
-				test: /\.(png|jpg|gif)$/,
+      {
+        test: /\.(png|jpg|gif)$/,
    				include: cfg.APP_PATH,
-				use: [
-					'file-loader'
-				]
-			},
-			{
-				test: /\.(woff|woff2|eot|ttf|otf)$/,
+        use: [
+          'file-loader',
+        ],
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/,
    				include: cfg.APP_PATH,
-				use: [
-					'file-loader'
-				]
-			},
-			{
-               test: /\.(js|jsx)$/,
+        use: [
+          'file-loader',
+        ],
+      },
+      {
+        test: /\.(js|jsx)$/,
    				include: cfg.APP_PATH,
-   				use: ['babel-loader','eslint-loader']
-            },
-            { 	
+   				use: ['babel-loader', 'eslint-loader'],
+      },
+      {
             	test: /\.(svg)$/i,
-                use: ['svg-sprite-loader'],
-                include: [
-                    require.resolve('antd-mobile').replace(/warn\.js$/, ''),  // 1. 属于 antd-mobile 内置 svg 文件
+        use: ['svg-sprite-loader'],
+        include: [
+          require.resolve('antd-mobile').replace(/warn\.js$/, ''),  // 1. 属于 antd-mobile 内置 svg 文件
                     // path.resolve(__dirname, 'src/static/icon'),  // 自己私人的 svg 存放目录
-                ],
-            },
-			{
-               test: /\.(ejs)$/,
-   				loader: 'ejs-loader'
-            }
+        ],
+      },
+      {
+        test: /\.(ejs)$/,
+   				loader: 'ejs-loader',
+      },
 
-		]
-	},
-	resolve: {
-		mainFiles: ['index.web','index'],
-		modules: ['app', 'node_modules', path.join(__dirname, './node_modules')],
-		extensions: [
-			'.web.tsx', '.web.ts', '.web.jsx', '.web.js', '.ts', '.tsx',
-			'.js',
-			'.jsx',
-			'.react.js',
-			'.less'
-		],
-		mainFields: [
-			'browser',
-			'jsnext:main',
-			'main',
-		],
-		// alias: {
-		// 	'react': 'react/dist/react.js',
-		// 	'react-dom': 'react-dom/dist/react-dom.js'
-		// }
-	},
-	target: 'web'
+    ],
+  },
+  resolve: {
+    mainFiles: ['index.web', 'index'],
+    modules: ['app', 'node_modules', path.join(__dirname, './node_modules')],
+    extensions: [
+      '.web.tsx', '.web.ts', '.web.jsx', '.web.js', '.ts', '.tsx',
+      '.js',
+      '.jsx',
+      '.react.js',
+      '.less',
+    ],
+    mainFields: [
+      'browser',
+      'jsnext:main',
+      'main',
+    ],
+    alias: {
+      src: cfg.APP_PATH,
+    },
+  },
+  target: 'web',
 };
 // https://mp.weixin.qq.com/s/Z6CXa_5HP4RccfebxzmNng
 // http://blog.csdn.net/qq_24840407/article/details/56035713

@@ -9,10 +9,10 @@
 // document.body.appendChild(component());
 //
 
-import './style.less';
+import 'src/style.less';
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
 
-import Test from './Test.jsx';
+import Test from 'src/Test';
 
 render(<Test />, document.getElementById('root'));

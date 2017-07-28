@@ -26,10 +26,22 @@
 
 module.exports = {
   parser: "babel-eslint",
-  "extends": "airbnb",
+  extends: "airbnb",
+  parserOptions: {
+    sourceType: 'module'
+  },
+  root: true,
+  env: {
+    browser: true,
+  },
   "rules": {
     "no-unused-vars": 0,
     "max-len": [1, 120, 2, {ignoreComments: true}],
-    "prop-types": [2]
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    // "prop-types": [2],
+    "import/no-extraneous-dependencies": 0,
+    "import/no-unresolved": 0,
+  	"import/extensions": 0
   }
+
 }
