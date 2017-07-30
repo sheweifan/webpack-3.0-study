@@ -46,9 +46,9 @@ const config = merge(baseConfig, {
       statsOptions: { source: false },
     }),
 		// 公共js
-	    new webpack.optimize.CommonsChunkPlugin({
-      names: 'vendor',  // name是提取公共代码块后js文件的名字。
-	    }),
+    new webpack.optimize.CommonsChunkPlugin({
+    names: 'vendor',  // name是提取公共代码块后js文件的名字。
+    }),
   ],
   module: {
     rules: [
