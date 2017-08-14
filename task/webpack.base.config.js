@@ -6,11 +6,6 @@ const cfg = require('./config.js').cfg;
 
 const is_prod = process.argv[1].indexOf('webpack-dev-server') === -1;
 module.exports = {
-	// 入口
-  entry: {
-    app: './src/index.js',
-		// vendor: ['react','react-dom']
-  },
     // 出口
   output: {
     filename: '[name].js',
@@ -65,7 +60,7 @@ module.exports = {
       {
         test: /\.(js|jsx)$/,
    				include: cfg.APP_PATH,
-   				use: ['babel-loader', 'eslint-loader'],
+   				use: ['react-hot-loader/webpack','babel-loader'], // 'eslint-loader'
       },
       {
             	test: /\.(svg)$/i,

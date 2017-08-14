@@ -5,7 +5,7 @@ import { Button, Icon } from 'antd-mobile';
 const Test = () => (
   <div>
     <Button className="test_btn">
-      test hehe
+      test hehe2
       <Icon type="check" />
     </Button>
   </div>

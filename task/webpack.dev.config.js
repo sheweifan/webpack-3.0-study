@@ -5,6 +5,14 @@ const merge = require('webpack-merge');
 const cfg = require('./config.js').cfg;
 
 const config = merge(baseConfig, {
+  entry: {
+    app: [
+      'babel-polyfill',
+      'react-hot-loader/patch',
+      './src/index.dev.js',
+    ]
+    // vendor: ['react','react-dom']
+  },
   devtool: 'source-map',
 	// 配置静态服务器
   devServer: {
@@ -14,6 +22,9 @@ const config = merge(baseConfig, {
     open: false,
     inline: true,
     disableHostCheck: true,
+    watchOptions: {
+      ignored: /node_modules/,
+    },
   },
   plugins: [
     new webpack.DefinePlugin({

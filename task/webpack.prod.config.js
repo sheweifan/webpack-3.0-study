@@ -14,7 +14,10 @@ const extractLESS = new ExtractTextPlugin('styles.css');
 const cfg = require('./config.js').cfg;
 
 const config = merge(baseConfig, {
+
+  // 入口
   entry: {
+    app: './src/index.prod.js',
     vendor: ['react', 'react-dom'],
   },
   plugins: [
